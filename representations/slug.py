@@ -2,7 +2,7 @@
 from unicodedata import normalize
 class slug:
 
-	def transform(self,input,encoding=None,permitted_chars='abcdefghijklmnopqrstuvwxyz0123456789-'):
+	def transform(self,input,encoding='utf-8',permitted_chars='abcdefghijklmnopqrstuvwxyz0123456789-'):
 		if isinstance(input, str):
 			input = input.decode(encoding or 'ascii')
 		clean_text = input.strip().replace(' ', '-').lower()
