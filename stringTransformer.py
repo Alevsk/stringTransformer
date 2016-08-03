@@ -49,7 +49,7 @@ URL = "https://github.com/alevsk/stringTransformer/"
 # Maximum length of left option column in help listing
 MAX_HELP_OPTION_LENGTH = 20
 
-BANNER = """
+BANNER = """  _______
        ____  |   _   |  ____
       |    |  \  V  /  |    |
       |   \ \  \_ _/  / /   |
