@@ -49,7 +49,8 @@ URL = "https://github.com/alevsk/stringTransformer/"
 # Maximum length of left option column in help listing
 MAX_HELP_OPTION_LENGTH = 20
 
-BANNER = """  _______
+BANNER = """
+              _______
        ____  |   _   |  ____
       |    |  \  V  /  |    |
       |   \ \  \_ _/  / /   |
@@ -182,9 +183,10 @@ def main():
 
 	if args.list:
 		representations = list_representations()
-
 		for _ in representations:
 			print("- %s" % _)
+			
+		print("\n")
 		exit()
 
 	inputs = []

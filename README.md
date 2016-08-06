@@ -45,7 +45,7 @@ class module:
 ```
 You must respect the following conventions:
 1. `Class name` is the same as the `file name`
-2. Class must have a function called `transform` that receive at least two parameters (self & input)
+2. Class must have a function called `transform` that receive at least two parameters (self & input) and an optional third parameter (an object that serves as a parameter holder for customization)
 3. `transform` function must return an string
 
 ie: `hexa` module:
