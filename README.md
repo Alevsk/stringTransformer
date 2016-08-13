@@ -39,7 +39,7 @@ NOTE: you can use the following code as an example:
 ```
 #!/usr/bin/env python -B
 class module:
-    def transform(self,input):
+    def transform(self,input, parameters = {}):
         '''your transformation algorithm'''
         return  input
 ```
