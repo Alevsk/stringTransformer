@@ -142,6 +142,9 @@ def parse_args():
 	parser.add_option("-o", "--only", dest="only",
 					  help="transform input only to this representations")
 
+	parser.add_option("-O", "--output", dest="output",
+					  help="generate an output file")
+
 	parser.add_option("--list", action="store_true", dest="list",
 					  help="list available input representations")
 
@@ -190,6 +193,7 @@ def main():
 		exit()
 
 	inputs = []
+	output = ""
 	representations = list_representations()
 
 	if args.only:
@@ -225,17 +229,21 @@ def main():
 	if not exists(OUTPUT_DIR):
 		makedirs(OUTPUT_DIR)
 
-	log = logger("%s/stringTransformer" % OUTPUT_DIR)
-	log.open()
-
 	modules = load_representations(representations)
 
 	for string in inputs:
 		print("%s\n\n%s applying transformation...\n" % (string, INFO))
 		for module in modules:
+			transformation = module.transform(string) + "\n"
+			output += transformation
 			print(module.__class__.__name__ + ":\n")
-			print(module.transform(string) + "\n")
+			print(transformation)
 		print("==================================\n")
+
+	if args.output:
+		f = open(OUTPUT_DIR + '/' + args.output,'w')
+		f.write(output)
+		f.close()
 
 if __name__ == "__main__":
 	try:
