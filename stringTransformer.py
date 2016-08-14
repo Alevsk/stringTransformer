@@ -29,6 +29,7 @@ import imp
 import os
 import sys
 
+from subprocess import Popen, PIPE
 from time import strftime
 from optparse import OptionParser
 from random import sample
@@ -49,25 +50,25 @@ URL = "https://github.com/alevsk/stringTransformer/"
 # Maximum length of left option column in help listing
 MAX_HELP_OPTION_LENGTH = 20
 
-BANNER = """
-              _______
-       ____  |   _   |  ____
-      |    |  \  V  /  |    |
-      |   \ \  \_ _/  / /   |
-      \  \ \ \   '   / / /  /
-       \  \   | 'V' |   /  /
+BANNER = """                  
+              _______         
+       _____ |   _   |  ____  
+      |    |  \  V  /  |    | 
+      |   \ \  \_ _/  / /   | 
+      \  \ \ \   '   / / /  / 
+       \  \   | 'V' |   /  /  
      |\ \_____| \ / |_____/ /|
      | \        | |        / |
      |  |    ,/|| ||\,    |  |
      |   `| '  || ||  ' |`   |
      |    | |  || ||  | |    |
      \    | |  || ||  | |    /
-      \.  | |  ||_||  | |  ./
-        \ | |  |___|  | | /
-         \\' ,  _____  , '/
-             \/ ___ \/    
-               /___\         
-                         """
+      \.  | |  ||_||  | |  ./ 
+       \  | |  |___|  | |  /  
+         \\' ,  _____  , '/    
+             \/ ___ \/        
+               /___\          
+                           """
 
 REPRESENTATIONS_DIR = "representations"
 
@@ -97,6 +98,75 @@ def update():
 	"""
 	Updates the program via git pull.
 	"""
+
+	print("%s Checking for updates..." % INFO)
+
+	process = Popen("git pull %s HEAD" % GIT_REPOSITORY, shell=True,
+					stdout=PIPE, stderr=PIPE)
+	stdout, stderr = process.communicate()
+	success = not process.returncode
+
+	if success:
+		updated = "Already" not in stdout
+		process = Popen("git rev-parse --verify HEAD", shell=True,
+						stdout=PIPE, stderr=PIPE)
+		stdout, _ = process.communicate()
+		revision = (stdout[:7] if stdout and
+					re.search(r"(?i)[0-9a-f]{32}", stdout) else "-")
+		print("%s the latest revision '%s'." %
+			  ("%s Already at" % INFO if not updated else
+			   "%s Updated to" % PLUS, revision))
+	else:
+		print("%s Problem occurred while updating program.\n" % WARN)
+
+		_ = re.search(r"(?P<error>error:[^:]*files\swould\sbe\soverwritten"
+					  r"\sby\smerge:(?:\n\t[^\n]+)*)", stderr)
+		if _:
+			def question():
+				"""Asks question until a valid answer of y or n is provided."""
+				print("\n%s Would you like to overwrite your changes and set "
+					  "your local copy to the latest commit?" % ASK)
+				sys_stdout.write("%s ALL of your local changes will be deleted"
+								 " [Y/n]: " % WARN)
+				_ = raw_input()
+
+				if not _:
+					_ = "y"
+
+				if _.lower() == "n":
+					exit()
+				elif _.lower() == "y":
+					return
+				else:
+					print("%s Did not understand your answer! Try again." %
+						  ERROR)
+					question()
+
+			print("%s" % _.group("error"))
+
+			question()
+
+			if "untracked" in stderr:
+				cmd = "git clean -df"
+			else:
+				cmd = "git reset --hard"
+
+			process = Popen(cmd, shell=True, stdout=PIPE, stderr=PIPE)
+			stdout, _ = process.communicate()
+
+			if "HEAD is now at" in stdout:
+				print("\n%s Local copy reset to current git branch." % INFO)
+				print("%s Attemping to run update again..." % INFO)
+			else:
+				print("%s Unable to reset local copy to current git branch." %
+					  WARN)
+				exit()
+
+			update()
+		else:
+			print("%s Please make sure that you have "
+				  "a 'git' package installed." % INFO)
+			print(stderr)
 
 def list_representations(extension=False):
 	"""

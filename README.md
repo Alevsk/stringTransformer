@@ -19,6 +19,7 @@ Options:
   -l/--load=LOAD_FILE   load list of input strings (one per line)
   -x/--exclude=EXCLUDE  exclude this representations
   -o/--only=ONLY        transform input only to this representations
+  -O/--output=OUTPUT    generate an output file
   --list                list available input representations
   --update              update from the official git repository
 
