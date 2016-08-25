@@ -7,11 +7,11 @@ class slug:
 		encoding = "utf-8"
 		permitted_chars='abcdefghijklmnopqrstuvwxyz0123456789-'
 
-		if hasattr(params, 'encoding'):
-			encoding = params.encoding
+		if 'encoding' in params:
+			encoding = params['encoding']
 
-		if hasattr(params, 'permitted_chars'):
-			permitted_chars = params.permitted_chars
+		if 'permitted_chars' in params:
+			encoding = params['permitted_chars']
 
 		if isinstance(input, str):
 			input = input.decode(encoding or 'ascii')

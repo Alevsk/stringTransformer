@@ -83,7 +83,7 @@ Examples:
 ./stringTransformer.py -i [STRING]
 ./stringTransformer.py -i [STRING] --exclude "hexa, octal"
 ./stringTransformer.py -i [STRING] --only "hexa, octal"
-./stringTransformer.py -i [STRING] --params "rot.cipher=rot_13,rot.encoding=utf-8"
+./stringTransformer.py -i [STRING] --params "rot.cipher=13,rot.encoding=utf-8"
 ./stringTransformer.py --load list.txt
 ./stringTransformer.py --list
 """
@@ -199,15 +199,12 @@ def parseParams(params):
 		b = a[0].split('.')
 		if b[0] in parameters:
 			obj = parameters[b[0]]
-			obj.a = lambda: None
-			setattr(obj.a, b[1], a[1])
+			obj[b[1]] = a[1]
 		else:
 			obj = {}
-			obj.a = lambda: None
-			setattr(obj.a, b[1], a[1])
+			obj[b[1]] = a[1]
 			parameters[b[0]] = obj
 
-	print(parameters)
 	return parameters
 
 def parse_args():
@@ -287,7 +284,7 @@ def main():
 		exit()
 
 	inputs = []
-	params = []
+	params = {}
 	output = ""
 	
 	representations = list_representations()
@@ -323,7 +320,6 @@ def main():
 	if(args.params):
 		params = parseParams(args.params)
 
-
 	print("%s Starting tests at: \"%s\"\n" % (INFO, color(strftime("%X"), BW)))
 
 	if not exists(OUTPUT_DIR):
@@ -334,7 +330,7 @@ def main():
 	for string in inputs:
 		print("%s\n\n%s applying transformation...\n" % (string, INFO))
 		for module in modules:
-			transformation = module.transform(string) + "\n"
+			transformation = module.transform(string, params[module.__class__.__name__] if module.__class__.__name__ in params else {}) + "\n"
 			output += transformation
 			print(module.__class__.__name__ + ":\n")
 			print(transformation)

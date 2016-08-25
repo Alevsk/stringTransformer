@@ -27,6 +27,7 @@ Examples:
 ./stringTransformer.py -i [STRING]
 ./stringTransformer.py -i [STRING] --exclude "hexa, octal"
 ./stringTransformer.py -i [STRING] --only "hexa, octal"
+./stringTransformer.py -i [STRING] --params "rot.cipher=13,rot.encoding=utf-8"
 ./stringTransformer.py --load list.txt
 ./stringTransformer.py --list
 ```
