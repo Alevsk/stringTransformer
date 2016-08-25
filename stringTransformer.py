@@ -83,6 +83,7 @@ Examples:
 ./stringTransformer.py -i [STRING]
 ./stringTransformer.py -i [STRING] --exclude "hexa, octal"
 ./stringTransformer.py -i [STRING] --only "hexa, octal"
+./stringTransformer.py -i [STRING] --params "rot.cipher=rot_13,rot.encoding=utf-8"
 ./stringTransformer.py --load list.txt
 ./stringTransformer.py --list
 """
@@ -189,6 +190,26 @@ def load_representations(list):
 	return modules
 
 
+def parseParams(params):
+	parameters = {}
+	params = params.split(',')
+	
+	for param in params:
+		a = param.split('=')
+		b = a[0].split('.')
+		if b[0] in parameters:
+			obj = parameters[b[0]]
+			obj.a = lambda: None
+			setattr(obj.a, b[1], a[1])
+		else:
+			obj = {}
+			obj.a = lambda: None
+			setattr(obj.a, b[1], a[1])
+			parameters[b[0]] = obj
+
+	print(parameters)
+	return parameters
+
 def parse_args():
 	"""
 	Parses the command line arguments.
@@ -214,6 +235,9 @@ def parse_args():
 
 	parser.add_option("-O", "--output", dest="output",
 					  help="generate an output file")
+
+	parser.add_option("-p", "--params", dest="params",
+					  help="use custom parameters on transformation functions")
 
 	parser.add_option("--list", action="store_true", dest="list",
 					  help="list available input representations")
@@ -263,7 +287,9 @@ def main():
 		exit()
 
 	inputs = []
+	params = []
 	output = ""
+	
 	representations = list_representations()
 
 	if args.only:
@@ -293,6 +319,10 @@ def main():
 
 	if args.input:
 		inputs.append(args.input)
+
+	if(args.params):
+		params = parseParams(args.params)
+
 
 	print("%s Starting tests at: \"%s\"\n" % (INFO, color(strftime("%X"), BW)))
 
