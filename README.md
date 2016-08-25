@@ -20,6 +20,7 @@ Options:
   -x/--exclude=EXCLUDE  exclude this representations
   -o/--only=ONLY        transform input only to this representations
   -O/--output=OUTPUT    generate an output file
+  -p/--params=PARAMS    use custom parameters on transformation functions
   --list                list available input representations
   --update              update from the official git repository
 
