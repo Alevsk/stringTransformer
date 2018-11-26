@@ -2,3 +2,4 @@
 http://my.oracle.com/site/ladsc/Home/ComunicacionesCorporativas/MX/index.htm
 parameter=value&also=another
 aHR0cDovL215Lm9yYWNsZS5jb20vc2l0ZS9sYWRzYy9Ib21lL0NvbXVuaWNhY2lvbmVzQ29ycG9yYXRpdmFzL01YL2luZGV4Lmh0bQ==
+68747470733a2f2f68312d353431312e68316374662e636f6d
